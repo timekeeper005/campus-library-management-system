@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.demo.mapper.BookMapper">
+
+    <select id="searchBooks" resultType="com.demo.entity.Book">
+        SELECT *
+        FROM book
+        WHERE 1 = 1
+        <if test="keyword != null and keyword != ''">
+            AND (
+            title LIKE CONCAT('%', #{keyword}, '%')
+            OR author LIKE CONCAT('%', #{keyword}, '%')
+            OR category LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <select id="getById" resultType="com.demo.entity.Book">
+        SELECT *
+        FROM book
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertBook" parameterType="com.demo.entity.Book" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO book (title, author, category, stock, status)
+        VALUES (#{title}, #{author}, #{category}, #{stock}, #{status})
+    </insert>
+
+    <update id="updateBook" parameterType="com.demo.entity.Book">
+        UPDATE book
+        SET title = #{title},
+            author = #{author},
+            category = #{category},
+            stock = #{stock},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="reduceStock">
+        UPDATE book
+        SET stock = stock - 1
+        WHERE id = #{bookId}
+          AND stock > 0
+    </update>
+
+    <update id="increaseStock">
+        UPDATE book
+        SET stock = stock + 1
+        WHERE id = #{bookId}
+    </update>
+</mapper>

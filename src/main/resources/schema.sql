@@ -1,0 +1,41 @@
+DROP TABLE IF EXISTS operation_log;
+DROP TABLE IF EXISTS borrow_record;
+DROP TABLE IF EXISTS book;
+DROP TABLE IF EXISTS sys_user;
+
+CREATE TABLE sys_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE book (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    status VARCHAR(20) NOT NULL DEFAULT 'AVAILABLE'
+);
+
+CREATE TABLE borrow_record (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    book_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    user_name VARCHAR(50) NOT NULL,
+    borrow_time TIMESTAMP NOT NULL,
+    return_time TIMESTAMP NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'BORROWED',
+    overdue_days INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE operation_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    operator_name VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    target_type VARCHAR(50) NOT NULL,
+    target_id BIGINT NOT NULL,
+    detail VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.demo.mapper.BorrowRecordMapper">
+
+    <insert id="insertBorrowRecord" parameterType="com.demo.entity.BorrowRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO borrow_record (book_id, user_id, user_name, borrow_time, status, overdue_days)
+        VALUES (#{bookId}, #{userId}, #{userName}, #{borrowTime}, #{status}, #{overdueDays})
+    </insert>
+
+    <select id="getById" resultType="com.demo.entity.BorrowRecord">
+        SELECT *
+        FROM borrow_record
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUserId" resultType="com.demo.entity.BorrowRecord">
+        SELECT *
+        FROM borrow_record
+        WHERE user_id = #{userId}
+        ORDER BY borrow_time DESC
+    </select>
+
+    <update id="updateReturnStatus">
+        UPDATE borrow_record
+        SET return_time = #{returnTime},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
